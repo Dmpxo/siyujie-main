@@ -1,248 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>思愈界 | 和合香品 · 非遗传承</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#18221c">
+  <title>思愈界 | 随身东方合香</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg-deep:#0d0c0b;--bg-card:#1a1612;--bg-overlay:rgba(13,12,11,0.95);
-      --accent-gold:#c9a96e;--accent-gold-dim:rgba(201,169,110,0.6);--accent-gold-glow:rgba(201,169,110,0.25);
-      --text-primary:#e8e4de;--text-muted:#7a7068;--text-faint:#4a4440;
-      --border-subtle:rgba(201,169,110,0.1);--border-gold:rgba(201,169,110,0.3);
-      --radius:16px;
-    }
-    html{scroll-behavior:smooth}
-    body{
-      font-family:'Noto Sans SC',sans-serif;
-      background:var(--bg-deep);color:var(--text-primary);
-      min-height:100vh;overflow-x:hidden;line-height:1.7;
-    }
-
-    /* ====== 粒子背景 ====== */
-    .particles-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-    .particle{position:absolute;width:2px;height:2px;border-radius:50%;background:var(--accent-gold);opacity:0;animation:float-p linear infinite}
-    @keyframes float-p{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.5}90%{opacity:.5}100%{opacity:0;transform:translateY(-10vh)}}
-
-    /* ====== Hero Section ====== */
-    .hero-section{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden}
-    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,169,110,0.08) 0%,transparent 60%),radial-gradient(ellipse at 0% 100%,rgba(201,169,110,0.04) 0%,transparent 40%),radial-gradient(ellipse at 100% 0%,rgba(201,169,110,0.04) 0%,transparent 40%)}
-    
-    .hero-brand{font-family:'Noto Serif SC',serif;font-size:clamp(3rem,12vw,5rem);font-weight:700;letter-spacing:.2em;margin-bottom:8px;opacity:0;animation:fade-up 1s ease-out .3s forwards}
-    .hero-brand span{color:var(--accent-gold);text-shadow:0 0 60px rgba(201,169,110,0.5)}
-    .hero-sub-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--accent-gold-dim);letter-spacing:.4em;margin-bottom:24px;opacity:0;animation:fade-up 1s ease-out .6s forwards}
-    .hero-tagline{font-size:.9rem;color:var(--text-primary);letter-spacing:.3em;margin-bottom:20px;opacity:0;animation:fade-up 1s ease-out .9s forwards}
-    .hero-desc{font-size:.8rem;color:var(--text-muted);max-width:550px;line-height:2;opacity:0;animation:fade-up 1s ease-out 1.2s forwards}
-    
-    .hero-scroll{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-muted);font-size:.7rem;letter-spacing:.2em;opacity:0;animation:fade-up 1s ease-out 1.8s forwards}
-    .scroll-arrow{width:24px;height:36px;border:1px solid var(--text-muted);border-radius:12px;position:relative}
-    .scroll-arrow::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:4px;height:8px;background:var(--text-muted);border-radius:2px;animation:scroll-bounce 1.5s ease-in-out infinite}
-    @keyframes scroll-bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
-    @keyframes fade-up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-
-    /* ====== Brand Story ====== */
-    .story-section{padding:80px 20px;position:relative}
-    .story-container{max-width:800px;margin:0 auto;text-align:center}
-    .story-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.5rem,4vw,2rem);font-weight:600;letter-spacing:.1em;margin-bottom:24px}
-    .story-content{font-size:.9rem;color:var(--text-muted);line-height:2.2;text-align:justify;text-indent:2em}
-    .story-highlight{color:var(--accent-gold)}
-    .story-divider{height:1px;background:linear-gradient(90deg,transparent,var(--accent-gold-dim),transparent);margin:40px 0}
-    .story-quote{font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--text-primary);line-height:2;font-style:italic;text-align:center;margin-top:20px}
-
-    /* ====== Series Grid ====== */
-    .series-section{padding:80px 20px 120px;position:relative}
-    .series-header{text-align:center;margin-bottom:50px}
-    .series-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.8rem,5vw,2.5rem);font-weight:700;letter-spacing:.1em;margin-bottom:12px}
-    .series-sub{font-size:.85rem;color:var(--text-muted);letter-spacing:.2em}
-    
-    .series-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1100px;margin:0 auto}
-    
-    .series-card{position:relative;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius);padding:32px;overflow:hidden;transition:all .5s ease;text-decoration:none;color:var(--text-primary)}
-    .series-card:hover{border-color:var(--accent-gold);transform:translateY(-8px);box-shadow:0 25px 60px rgba(0,0,0,0.4)}
-    
-    .series-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent-gold),transparent);opacity:0;transition:opacity .3s}
-    .series-card:hover::before{opacity:1}
-    
-    .series-icon{font-size:3.5rem;margin-bottom:20px;display:block;text-align:center}
-    .series-name{font-family:'Noto Serif SC',serif;font-size:1.5rem;font-weight:600;text-align:center;margin-bottom:8px;letter-spacing:.1em}
-    .series-subtitle{font-size:.8rem;color:var(--accent-gold-dim);text-align:center;letter-spacing:.2em;margin-bottom:20px}
-    .series-desc{font-size:.8rem;color:var(--text-muted);line-height:1.8;text-align:center}
-    .series-count{display:inline-block;margin-top:16px;font-size:.65rem;color:var(--text-faint);border:1px solid var(--border-subtle);padding:4px 12px;border-radius:12px}
-    
-    /* 系列特定样式 */
-    .series-wuxing:hover{border-color:#e5554e}
-    .series-wuxing::before{background:linear-gradient(90deg,transparent,#e5554e,transparent)}
-    .series-siji:hover{border-color:#6ba88a}
-    .series-siji::before{background:linear-gradient(90deg,transparent,#6ba88a,transparent)}
-    .series-daoxing:hover{border-color:#c9a96e}
-    .series-daoxing::before{background:linear-gradient(90deg,transparent,#c9a96e,transparent)}
-    .series-huashen:hover{border-color:#e8c4c4}
-    .series-huashen::before{background:linear-gradient(90deg,transparent,#e8c4c4,transparent)}
-
-    /* ====== NFC Preview ====== */
-    .nfc-section{padding:80px 20px;position:relative}
-    .nfc-container{max-width:900px;margin:0 auto}
-    .nfc-header{text-align:center;margin-bottom:40px}
-    .nfc-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.5rem,4vw,2rem);font-weight:600;letter-spacing:.1em;margin-bottom:12px}
-    .nfc-sub{font-size:.85rem;color:var(--text-muted);letter-spacing:.2em}
-    
-    .nfc-card{background:linear-gradient(135deg,rgba(201,169,110,0.1) 0%,rgba(201,169,110,0.02) 100%);border:1px solid var(--border-gold);border-radius:var(--radius);padding:40px;text-align:center;position:relative;overflow:hidden}
-    .nfc-scan-icon{font-size:4rem;margin-bottom:20px;animation:pulse-gold 2s ease-in-out infinite}
-    @keyframes pulse-gold{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.7}}
-    .nfc-text{font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--text-primary);margin-bottom:8px}
-    .nfc-subtext{font-size:.85rem;color:var(--text-muted);margin-bottom:24px}
-    .nfc-btn{display:inline-block;padding:12px 32px;border:1px solid var(--accent-gold);border-radius:30px;color:var(--accent-gold);text-decoration:none;font-size:.85rem;letter-spacing:.2em;transition:all .3s}
-    .nfc-btn:hover{background:var(--accent-gold);color:var(--bg-deep)}
-
-    /* ====== Footer ====== */
-    .footer{padding:60px 20px 100px;text-align:center;background:var(--bg-deep)}
-    .footer-brand{font-family:'Noto Serif SC',serif;font-size:1.5rem;font-weight:700;margin-bottom:8px}
-    .footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--accent-gold-dim);margin-bottom:24px}
-    .footer-note{font-size:.75rem;color:var(--text-faint);line-height:2;margin-bottom:20px}
-    .footer-contact{font-size:.7rem;color:var(--text-muted)}
-    .footer-contact span{color:var(--accent-gold)}
-
-    /* ====== Navigation ====== */
-    .nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(13,12,11,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border-subtle);padding:12px 20px}
-    .nav-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
-    .nav-link{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-muted);text-decoration:none;font-size:.75rem;transition:all .3s}
-    .nav-link.active{color:var(--accent-gold)}
-    .nav-icon{font-size:1.2rem}
-
-    /* ====== 响应式 ====== */
-    @media(max-width:768px){
-      .series-grid{grid-template-columns:1fr}
-      .hero-brand{font-size:2.5rem}
-      .story-content{text-align:left}
-    }
+    :root{--ink:#19211c;--forest:#24372b;--jade:#6f876f;--rice:#f4efe4;--paper:#e7deca;--gold:#a87d45;--line:rgba(54,65,48,.19);--muted:#647065;--shadow:0 18px 42px rgba(30,38,28,.13)}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--rice);color:var(--ink);font-family:"Noto Sans SC",sans-serif;line-height:1.65} a{color:inherit;text-decoration:none}
+    .grain{position:fixed;inset:0;pointer-events:none;opacity:.17;z-index:10;background-image:repeating-radial-gradient(circle at 17% 22%,rgba(70,54,30,.22) 0 1px,transparent 1px 4px)}
+    .shell{max-width:1180px;margin:auto;padding:0 24px}.site-head{height:70px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.site-mark{font-family:"Noto Serif SC",serif;font-weight:700;letter-spacing:.13em}.site-mark small{font-family:"Noto Sans SC",sans-serif;font-weight:400;color:var(--muted);letter-spacing:.06em;margin-left:8px}.spot-pill{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 11px;border-radius:99px}
+    .hero{min-height:680px;display:grid;grid-template-columns:1.04fr .96fr;gap:54px;align-items:center;padding:54px 24px 72px}.eyebrow{font-size:12px;letter-spacing:.24em;color:var(--gold);font-weight:600}.hero h1{font-family:"Noto Serif SC",serif;font-size:clamp(42px,6vw,76px);line-height:1.18;letter-spacing:.09em;margin:17px 0}.hero p{font-size:17px;color:#506055;max-width:480px;margin:0 0 28px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:4px;font-size:14px;font-weight:600;letter-spacing:.08em;transition:.2s}.button.primary{background:var(--forest);color:#fff}.button.primary:hover{background:#101a13}.button.ghost{border:1px solid #6d806d;color:var(--forest)}
+    .seal-card{min-height:480px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#d8ccb7,#eee7d7 48%,#cabda7);box-shadow:var(--shadow)}.seal-card:before,.seal-card:after{content:"";position:absolute;border:1px solid rgba(88,73,48,.26);border-radius:50%}.seal-card:before{width:440px;height:440px}.seal-card:after{width:340px;height:340px}.seal-card img{height:340px;width:auto;position:relative;z-index:1;filter:drop-shadow(0 14px 12px rgba(42,35,23,.15))}.seal-note{position:absolute;bottom:23px;z-index:2;font-family:"Noto Serif SC",serif;color:#5e543e;letter-spacing:.14em;font-size:13px}
+    section{padding:78px 0;border-top:1px solid var(--line)}.section-intro{max-width:640px;margin-bottom:33px}.section-intro h2{font:600 clamp(28px,4vw,42px)/1.35 "Noto Serif SC",serif;letter-spacing:.08em;margin:8px 0}.section-intro p{color:var(--muted);margin:0}
+    .intent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.intent{min-height:154px;display:flex;flex-direction:column;justify-content:space-between;padding:21px;background:#faf7ef;border:1px solid var(--line);transition:.2s}.intent:hover{background:var(--forest);color:#fff;transform:translateY(-3px);box-shadow:var(--shadow)}.intent span{font:600 20px "Noto Serif SC",serif;letter-spacing:.08em}.intent small{opacity:.72;font-size:12px}.intent b{font-size:17px;font-weight:400;align-self:flex-end}
+    .guide{background:var(--forest);color:#fff}.guide .shell{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}.guide h2{font:600 30px "Noto Serif SC",serif;letter-spacing:.1em;margin:5px 0}.guide p{margin:0;color:#d6dfd4}.guide .button{background:#ead8b6;color:#263326;white-space:nowrap}
+    .series{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line)}.series a{min-height:254px;padding:25px 20px;border-right:1px solid var(--line);background:#faf7ef;transition:.2s}.series a:last-child{border:0}.series a:hover{background:#ece2cf}.series-index{font:500 14px "Noto Serif SC",serif;color:var(--gold)}.series h3{font:600 25px "Noto Serif SC",serif;letter-spacing:.08em;margin:26px 0 8px}.series p{font-size:13px;color:var(--muted);margin:0}.series em{display:block;font-style:normal;font-size:12px;color:var(--gold);margin-top:26px}
+    .story{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}.story-quote{font:600 29px/1.65 "Noto Serif SC",serif;letter-spacing:.06em;margin:0}.story-copy{color:#536057}.story-copy p:first-child{margin-top:0}.story-copy strong{color:var(--forest)}
+    .contact{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;background:#e9e0cf;padding:35px}.contact h2{font:600 30px "Noto Serif SC",serif;letter-spacing:.1em;margin:4px 0 10px}.contact p{color:#536057;margin:0}.contact-box{padding:20px;border:1px solid rgba(82,74,54,.25);background:rgba(250,247,239,.6)}.contact-box b{display:block;font-family:"Noto Serif SC",serif;letter-spacing:.08em}.contact-box span{font-size:13px;color:var(--muted)}
+    footer{padding:30px 0 50px;color:#728075;font-size:12px;display:flex;justify-content:space-between;gap:20px}.hidden{display:none}
+    @media(max-width:800px){.shell{padding:0 18px}.hero{grid-template-columns:1fr;gap:30px;min-height:auto;padding:42px 18px 48px}.seal-card{min-height:320px;order:-1}.seal-card img{height:245px}.intent-grid,.series{grid-template-columns:repeat(2,1fr)}.series a:nth-child(2){border-right:0}.series a:nth-child(-n+2){border-bottom:1px solid var(--line)}.guide .shell,.story,.contact{grid-template-columns:1fr}.guide .button{justify-self:start}section{padding:56px 0}.spot-pill{font-size:11px}.hero h1{font-size:44px}}
+    @media(max-width:430px){.intent-grid{grid-template-columns:1fr 1fr}.intent{min-height:130px;padding:16px}.intent span{font-size:17px}.site-head{height:63px}.hero p{font-size:15px}}
   </style>
 </head>
 <body>
-  <div class="particles-container" id="particles"></div>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-bg"></div>
-    <div class="hero-brand">思愈界</div>
-    <div class="hero-sub-en">Scent & Soul</div>
-    <div class="hero-tagline">和合香品 · 非遗传承</div>
-    <div class="hero-desc">植根古方药理，融合现代生物低温提香工艺<br>首创花材、香材、本草药材三合一合香体系<br>起源于绵阳江油大悲寺 · 四川合香文化发源地</div>
-    <div class="hero-scroll">
-      <span>探索系列</span>
-      <div class="scroll-arrow"></div>
-    </div>
-  </section>
-
-  <!-- Brand Story -->
-  <section class="story-section">
-    <div class="story-container">
-      <h2 class="story-title">品牌故事</h2>
-      <p class="story-content">
-        <span class="story-highlight">思愈界</span>起源于绵阳江油大悲寺，植根四川合香文化发源地，传承千年非遗制香技艺。我们相信，香不仅是嗅觉的享受，更是身心疗愈的媒介。
-      </p>
-      <p class="story-content">
-        每一款香品都遵循古法「君臣佐使」配伍原则，依据《黄帝内经》《道藏》《香乘》《本草纲目》等典籍，结合五运六气、三焦理论，专为现代人体质调配。我们融合传统中草药学与现代生物科技，采用低温提香工艺，最大程度保留香材的活性成分。
-      </p>
-      <div class="story-divider"></div>
-      <p class="story-quote">"和合之香，以天地之灵气，养人身之正气"</p>
-    </div>
-  </section>
-
-  <!-- Series Grid -->
-  <section class="series-section">
-    <div class="series-header">
-      <h2 class="series-title">四大系列</h2>
-      <p class="series-sub">经典传承 · 四季流转 · 道法自然 · 花神祝福</p>
-    </div>
-    <div class="series-grid">
-      <a href="https://siyujie.online" class="series-card series-wuxing">
-        <div class="series-icon">🌀</div>
-        <div class="series-name">五行经典</div>
-        <div class="series-subtitle">Traditional Classics</div>
-        <div class="series-desc">依据五行学说，以沉香、檀香、花香等传统香材，调和人体五脏六腑，平衡阴阳气血</div>
-        <div class="series-count">14款产品</div>
-      </a>
-      <a href="https://siyujie.xyz" class="series-card series-siji">
-        <div class="series-icon">🌸</div>
-        <div class="series-name">四季果香</div>
-        <div class="series-subtitle">Seasonal Rhythm</div>
-        <div class="series-desc">遵循《黄帝内经》四时总则，春生木疏肝、夏长火清心、长夏土化湿、秋收金润肺、冬藏水温肾</div>
-        <div class="series-count">6款产品</div>
-      </a>
-      <a href="https://siyujie.shop" class="series-card series-daoxing">
-        <div class="series-icon">☯️</div>
-        <div class="series-name">道系灵山</div>
-        <div class="series-subtitle">Taoist Circulation</div>
-        <div class="series-desc">依据道家六气理论，御财聚气、鸿运破滞、静好解郁、容颜养颜、不燥平衡、通窍活络</div>
-        <div class="series-count">12款产品</div>
-      </a>
-      <a href="https://end-dmpxo.art" class="series-card series-huashen">
-        <div class="series-icon">🌺</div>
-        <div class="series-name">十二花神</div>
-        <div class="series-subtitle">Flower Goddesses</div>
-        <div class="series-desc">十二月份花神守护，每款香品对应一位花神，承载四季花卉的灵气与祝福</div>
-        <div class="series-count">12款产品</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- NFC Preview -->
-  <section class="nfc-section">
-    <div class="nfc-container">
-      <div class="nfc-header">
-        <h2 class="nfc-title">扫码结缘</h2>
-        <p class="nfc-sub">NFC智能香卡 · 随时随地了解香品</p>
+  <div class="grain"></div>
+  <header class="shell site-head">
+    <a class="site-mark" href="#top"><span>慈莲如意</span><small>· 思愈界</small></a>
+    <span class="spot-pill" id="spotLabel">市集选香指南</span>
+  </header>
+  <main id="top">
+    <div class="shell hero">
+      <div>
+        <div class="eyebrow">CILIAN RU YI · SCENT & SOUL</div>
+        <h1>一串随身的<br>东方合香</h1>
+        <p>从香气、时节与当下感受出发，找到属于你的那一缕随身香韵。</p>
+        <div class="hero-actions"><a class="button primary" href="#choose">开始选香</a><a class="button ghost" href="#story">认识思愈界</a></div>
       </div>
-      <div class="nfc-card">
-        <div class="nfc-scan-icon">📱</div>
-        <div class="nfc-text">扫码探索更多</div>
-        <div class="nfc-subtext">扫描香卡上的二维码或NFC芯片<br>了解香品详情、功效与使用方法</div>
-        <a href="#" class="nfc-btn">立即体验</a>
+      <div class="seal-card"><img src="assets/cilian-ruyi-brand-card.png" alt="慈莲如意 · 思愈界品牌标识"><span class="seal-note">香气，陪你回到自己的节律</span></div>
+    </div>
+
+    <section id="choose"><div class="shell">
+      <div class="section-intro"><div class="eyebrow">FIND YOUR SCENT</div><h2>此刻，你想要怎样的香气？</h2><p>点击一个场景，AI 香道顾问会根据你的需求推荐适合了解的合香系列。</p></div>
+      <div class="intent-grid">
+        <a class="intent" data-intent="睡前放松，想找一款气味温柔、适合夜晚陪伴的合香" href="https://end-dmpxo.art/"><span>睡前放松</span><small>夜晚 · 静下来</small><b>→</b></a>
+        <a class="intent" data-intent="经常熬夜，白天容易疲惫，想找一款清透不厚重的合香" href="https://end-dmpxo.art/"><span>熬夜疲惫</span><small>提振 · 清醒感</small><b>→</b></a>
+        <a class="intent" data-intent="久坐工作后感觉闷，想找一款干净舒展的合香" href="https://end-dmpxo.art/"><span>久坐沉闷</span><small>舒展 · 轻松感</small><b>→</b></a>
+        <a class="intent" data-intent="想挑一款送礼的合香手串，希望有美好寓意且香味有记忆点" href="https://end-dmpxo.art/"><span>送礼祝福</span><small>生日 · 心意</small><b>→</b></a>
+        <a class="intent" data-intent="想找一款适合事业进阶、见客户或重要时刻佩戴的合香" href="https://end-dmpxo.art/"><span>事业进阶</span><small>笃定 · 从容</small><b>→</b></a>
+        <a class="intent" data-intent="想了解一款带有财富祝福寓意、适合日常佩戴的合香" href="https://end-dmpxo.art/"><span>财富祈愿</span><small>祝福 · 守护</small><b>→</b></a>
+        <a class="intent" data-intent="我只想找一款闻起来舒服、适合日常佩戴的合香，请帮我推荐" href="https://end-dmpxo.art/"><span>闻香日常</span><small>好闻 · 随身</small><b>→</b></a>
+        <a class="intent" data-intent="想按我的出生月份或喜欢的花挑选十二花神合香" href="https://end-dmpxo.art/"><span>花神守护</span><small>月份 · 花意</small><b>→</b></a>
       </div>
-    </div>
-  </section>
+    </div></section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-brand">思愈界</div>
-    <div class="footer-tagline">"A scent, a blessing, a connection."</div>
-    <p class="footer-note">植根古方药理，融合现代生物低温提香工艺<br>首创花材、香材、本草药材三合一合香体系</p>
-    <p class="footer-contact">📍 四川绵阳江油大悲寺 | 📧 <span>contact@si-yujie.com</span></p>
-  </footer>
+    <section class="guide"><div class="shell"><div><div class="eyebrow" style="color:#ead8b6">AI SCENT GUIDE</div><h2>说说你现在的状态，让香来回应。</h2><p>不确定自己适合哪一款？进入 AI 香道顾问，像和摊主聊天一样选香。</p></div><a class="button" href="https://end-dmpxo.art/" id="aiGuide">和 AI 香道顾问聊聊</a></div></section>
 
-  <!-- Navigation -->
-  <nav class="nav-bar">
-    <div class="nav-links">
-      <a href="index.html" class="nav-link active"><span class="nav-icon">🏠</span><span>首页</span></a>
-      <a href="https://siyujie.online" class="nav-link"><span class="nav-icon">🌀</span><span>五行经典</span></a>
-      <a href="https://siyujie.xyz" class="nav-link"><span class="nav-icon">🌸</span><span>四季果香</span></a>
-      <a href="https://siyujie.shop" class="nav-link"><span class="nav-icon">☯️</span><span>道系灵山</span></a>
-      <a href="https://end-dmpxo.art" class="nav-link"><span class="nav-icon">🌺</span><span>十二花神</span></a>
-    </div>
-  </nav>
+    <section><div class="shell"><div class="section-intro"><div class="eyebrow">FOUR COLLECTIONS</div><h2>完整产品目录</h2><p>从五行、节律、愿景与花神意象，进入不同的香气世界。</p></div><div class="series">
+      <a href="https://siyujie.online"><span class="series-index">01 / 五行</span><h3>五行经典</h3><p>以传统香材与五行意象，陪伴日常不同状态。</p><em>浏览系列 →</em></a>
+      <a href="https://siyujie.xyz"><span class="series-index">02 / 节律</span><h3>四季果香</h3><p>顺着季节流转，感受明亮、清爽与温润。</p><em>浏览系列 →</em></a>
+      <a href="https://siyujie.shop"><span class="series-index">03 / 愿景</span><h3>道系灵山</h3><p>把守护、笃定与祝福，带在日常的手腕上。</p><em>浏览系列 →</em></a>
+      <a href="https://end-dmpxo.art"><span class="series-index">04 / 花意</span><h3>十二花神</h3><p>十二月花意与香韵，献给每一段独特时节。</p><em>浏览系列 →</em></a>
+    </div></div></section>
 
+    <section id="story"><div class="shell story"><p class="story-quote">“香不替你定义生活，<br>它只是静静陪你，<br>回到自己的节律。”</p><div class="story-copy"><p><strong>思愈界</strong>以合香为媒介，寻找传统香材、花意与当代生活之间更轻盈的连接。</p><p>每一款产品围绕香韵、意象与使用场景展开。你可以把它当作一份贴身的香气、一种日常的仪式感，或一份带着祝福的礼物。</p><p>线下欢迎试闻；线上可先从你的当下感受出发，与 AI 香道顾问一起慢慢挑选。</p></div></div></section>
+
+    <section><div class="shell contact"><div><div class="eyebrow">MEET US OFFLINE</div><h2>在市集，闻见这一串香。</h2><p>试闻、聊天、慢慢选。线下每个点位由自己的摊主接待，方便后续持续为你推荐新香。</p></div><div class="contact-box"><b id="contactTitle">当前点位：请向现场摊主扫码</b><span id="contactText">扫码添加本点位摊主微信，获取试香与新品提醒。</span></div></div></section>
+  </main>
+  <footer class="shell"><span>慈莲如意 · 思愈界</span><span>天然香材合香饰品，仅供佩戴与闻香体验</span></footer>
   <script>
-    // Create particles
-    function createParticles(){
-      const c=document.getElementById('particles');
-      for(let i=0;i<40;i++){
-        const p=document.createElement('div');
-        p.className='particle';
-        p.style.left=Math.random()*100+'%';
-        p.style.animationDuration=(15+Math.random()*25)+'s';
-        p.style.animationDelay=Math.random()*20+'s';
-        c.appendChild(p);
-      }
-    }
-
-    // Initialize
-    window.addEventListener('load',()=>{
-      createParticles();
-    });
+    (function(){
+      var spots={kuanzhai:{name:"宽窄巷子",hint:"宽窄巷子点位"},yulin:{name:"玉林",hint:"玉林点位"},taiguli:{name:"太古里",hint:"太古里点位"}};
+      var spot=new URLSearchParams(location.search).get("spot"); var data=spots[spot];
+      if(data){document.getElementById("spotLabel").textContent=data.name+" · 选香指南";document.getElementById("contactTitle").textContent="当前点位："+data.name;document.getElementById("contactText").textContent="请扫码添加"+data.hint+"摊主微信，获取试香与新品提醒。";}
+      document.querySelectorAll("[data-intent]").forEach(function(link){link.href="https://end-dmpxo.art/?q="+encodeURIComponent(link.dataset.intent);});
+      document.getElementById("aiGuide").href="https://end-dmpxo.art/?q="+encodeURIComponent("我想根据现在的状态选一款合香手串，请你先问我几个简单问题再推荐。");
+    })();
   </script>
 </body>
 </html>
