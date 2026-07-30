@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#22352a">
-  <meta name="description" content="思愈界 AI 香道顾问，从四大合香系列中为你筛选适合的一款。">
+  <meta name="description" content="思愈界 AI 香道顾问，从四大合香系列中帮你开始选香。">
+  <meta name="siyujie-ai-endpoint" content="https://siyujie-ai.maozilntano.workers.dev">
   <title>AI 香道顾问 | 思愈界</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --pine:#22352a; --paper:#f4f0e8; --ink:#1e281f; --vermilion:#8d3930; --line:rgba(30,40,31,.18); --mist:#e8e2d5; }
+    :root { --pine:#22352a; --paper:#f4f0e8; --ink:#1e281f; --vermilion:#8d3930; --line:rgba(30,40,31,.18); --mist:#e8e2d5; --warm:#f0dfbf; }
     * { box-sizing:border-box; }
     body { margin:0; background:var(--paper); color:var(--ink); font:400 16px/1.7 "Noto Sans SC",sans-serif; }
     a { color:inherit; text-decoration:none; }
@@ -19,13 +20,13 @@
     .head { min-height:76px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
     .brand { font:600 19px/1.2 "Noto Serif SC",serif; }
     .brand span { color:var(--vermilion); }
-    .back { font-size:13px; color:#536055; }
-    main { min-height:calc(100dvh - 76px); display:grid; grid-template-columns:minmax(0,1fr) minmax(360px,.78fr); gap:72px; align-items:center; padding:72px 0; }
+    .back { color:#536055; font-size:13px; }
+    main { display:grid; min-height:calc(100dvh - 76px); grid-template-columns:minmax(0,1fr) minmax(360px,.78fr); gap:72px; align-items:center; padding:72px 0; }
     .eyebrow { margin:0 0 12px; color:var(--vermilion); font-size:12px; font-weight:600; }
     h1 { max-width:620px; margin:0; font:600 clamp(38px,5vw,62px)/1.22 "Noto Serif SC",serif; }
     .intro { max-width:570px; margin:20px 0 0; color:#536055; font-size:17px; }
-    .context { margin:28px 0 0; padding:14px 16px; border-left:2px solid var(--vermilion); color:#49564a; font-size:14px; }
-    .tool { border:1px solid var(--line); padding:28px; background:rgba(255,255,255,.32); }
+    .context { margin:28px 0 0; border-left:2px solid var(--vermilion); padding:14px 16px; color:#49564a; font-size:14px; }
+    .tool { border:1px solid var(--line); background:rgba(255,255,255,.32); padding:28px; }
     .tool h2 { margin:0; font:600 25px/1.35 "Noto Serif SC",serif; }
     .tool p { margin:8px 0 0; color:#536055; font-size:14px; }
     .field { margin-top:24px; }
@@ -34,11 +35,23 @@
     .choice { min-height:39px; border:1px solid var(--line); padding:7px 12px; background:transparent; color:#455348; cursor:pointer; font:500 13px/1.4 "Noto Sans SC",sans-serif; }
     .choice[aria-pressed="true"] { border-color:var(--pine); background:var(--pine); color:#fff9ee; }
     textarea { width:100%; min-height:92px; resize:vertical; border:1px solid var(--line); background:#fffaf1; padding:11px 12px; color:var(--ink); font:400 14px/1.65 "Noto Sans SC",sans-serif; }
-    .start { width:100%; min-height:52px; margin-top:24px; border:0; background:var(--pine); color:#fff9ee; cursor:pointer; font:600 14px/1 "Noto Sans SC",sans-serif; letter-spacing:.08em; transition:background .2s,transform .2s; }
-    .start:hover { background:#344c3b; transform:translateY(-1px); }
-    .note { margin:14px 0 0; color:#6a756b; font-size:12px; line-height:1.65; }
+    .start, .send { display:inline-flex; width:100%; min-height:52px; align-items:center; justify-content:center; margin-top:24px; border:0; background:var(--pine); color:#fff9ee; cursor:pointer; font:600 14px/1 "Noto Sans SC",sans-serif; letter-spacing:.08em; transition:background .2s,transform .2s; }
+    .start:hover, .send:hover { background:#344c3b; transform:translateY(-1px); }
+    .start:disabled, .send:disabled { cursor:not-allowed; opacity:.6; transform:none; }
+    .note, .service-status { margin:14px 0 0; color:#6a756b; font-size:12px; line-height:1.65; }
+    .service-status[hidden], .chat[hidden], .setup[hidden] { display:none; }
+    .service-status[data-state="error"] { color:var(--vermilion); }
+    .chat { margin-top:24px; border-top:1px solid var(--line); padding-top:22px; }
+    .messages { display:flex; max-height:330px; flex-direction:column; gap:12px; overflow-y:auto; padding-right:4px; }
+    .message { max-width:92%; margin:0; padding:10px 12px; font-size:14px; line-height:1.7; white-space:pre-wrap; }
+    .message.user { align-self:flex-end; background:var(--pine); color:#fff9ee; }
+    .message.assistant { align-self:flex-start; background:#e9e0d0; color:#384438; }
+    .message.error { align-self:flex-start; border-left:2px solid var(--vermilion); background:#f3e3dd; color:#722f28; }
+    .composer { margin-top:16px; }
+    .composer textarea { min-height:76px; }
+    .send { margin-top:10px; }
     @media (max-width:800px) { main { grid-template-columns:1fr; gap:38px; padding:54px 0 66px; } }
-    @media (max-width:560px) { .shell { width:min(100% - 36px,1100px); } .head { min-height:68px; } h1 { font-size:39px; } .intro { font-size:16px; } .tool { padding:23px 18px; } }
+    @media (max-width:560px) { .shell { width:min(100% - 36px,1100px); } .head { min-height:68px; } h1 { font-size:39px; } .intro { font-size:16px; } .tool { padding:23px 18px; } .messages { max-height:300px; } }
     @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
   </style>
 </head>
@@ -51,27 +64,38 @@
     <section aria-labelledby="advisor-title">
       <p class="eyebrow">AI SCENT GUIDE</p>
       <h1 id="advisor-title">先聊一聊，再选一串适合你的香。</h1>
-      <p class="intro">从十二花神、五行经典、四季果香与道系灵山中，AI 香道顾问会先了解你的当下，再给出有限、清晰的建议。</p>
+      <p class="intro">从十二花神、五行经典、四季果香与道系灵山中，AI 香道顾问会先了解你的当下，再给出有限、清晰的开始方向。</p>
       <p class="context" id="contextText" hidden></p>
     </section>
-    <section class="tool" aria-label="AI 选香引导">
-      <h2>开始筛选</h2>
-      <p>你不需要先懂香。选一项，或写下此刻的想法。</p>
-      <div class="field">
-        <span class="field-label">这次更在意什么？</span>
-        <div class="choices" id="intentChoices">
-          <button class="choice" type="button" data-value="日常佩戴" aria-pressed="false">日常佩戴</button>
-          <button class="choice" type="button" data-value="送一份礼物" aria-pressed="false">送一份礼物</button>
-          <button class="choice" type="button" data-value="顺应季节" aria-pressed="false">顺应季节</button>
-          <button class="choice" type="button" data-value="想找一种香韵" aria-pressed="false">想找一种香韵</button>
+    <section class="tool" aria-label="AI 选香咨询">
+      <div class="setup" id="setup">
+        <h2>开始选香</h2>
+        <p>选一个场景，或直接写下此刻的想法。</p>
+        <div class="field">
+          <span class="field-label">这次更在意什么？</span>
+          <div class="choices" id="intentChoices">
+            <button class="choice" type="button" data-value="日常佩戴" aria-pressed="false">日常佩戴</button>
+            <button class="choice" type="button" data-value="送一份礼物" aria-pressed="false">送一份礼物</button>
+            <button class="choice" type="button" data-value="顺应季节" aria-pressed="false">顺应季节</button>
+            <button class="choice" type="button" data-value="想找一种香韵" aria-pressed="false">想找一种香韵</button>
+          </div>
         </div>
+        <div class="field">
+          <label class="field-label" for="note">想补充的话</label>
+          <textarea id="note" maxlength="500" placeholder="例如：最近希望生活节奏慢一点，偏爱清润的花木气息。"></textarea>
+        </div>
+        <button class="start" id="startAdvisor" type="button">开始 AI 选香</button>
+        <p class="note">AI 仅根据品牌资料提供选香参考，不替代医疗或专业建议。</p>
       </div>
-      <div class="field">
-        <label class="field-label" for="note">想补充的话</label>
-        <textarea id="note" placeholder="例如：最近希望生活节奏慢一点，偏爱清润的花木气息。"></textarea>
-      </div>
-      <button class="start" id="startAdvisor" type="button">进入 AI 香道顾问</button>
-      <p class="note">AI 仅根据品牌资料提供选香参考，不替代医疗或专业建议。</p>
+      <p class="service-status" id="serviceStatus" role="status" hidden></p>
+      <section class="chat" id="chat" aria-label="AI 香道顾问对话" hidden>
+        <div class="messages" id="messages" aria-live="polite"></div>
+        <form class="composer" id="chatForm">
+          <label class="field-label" for="chatInput">继续补充</label>
+          <textarea id="chatInput" maxlength="500" placeholder="告诉我你的送礼对象、喜欢的气味或当下状态。"></textarea>
+          <button class="send" id="sendButton" type="submit">发送</button>
+        </form>
+      </section>
     </section>
   </main>
   <script>
@@ -80,16 +104,20 @@
       var from = params.get('from') || '';
       var focus = params.get('focus') || '';
       var context = [from, focus].filter(Boolean).join(' · ');
+      var endpoint = document.querySelector('meta[name="siyujie-ai-endpoint"]').content.trim();
+      var selectedIntent = '';
+      var history = [];
+      var isSending = false;
       var contextText = document.getElementById('contextText');
       var returnLink = document.getElementById('returnLink');
-      var allowedReturns = [
-        'https://siyujie.fun',
-        'https://siyujie.online',
-        'https://siyujie.xyz',
-        'https://siyujie.shop',
-        'https://end-dmpxo.art'
-      ];
-      var selectedIntent = '';
+      var status = document.getElementById('serviceStatus');
+      var setup = document.getElementById('setup');
+      var chat = document.getElementById('chat');
+      var messages = document.getElementById('messages');
+      var input = document.getElementById('chatInput');
+      var startButton = document.getElementById('startAdvisor');
+      var sendButton = document.getElementById('sendButton');
+      var allowedReturns = ['https://siyujie.fun', 'https://siyujie.online', 'https://siyujie.xyz', 'https://siyujie.shop', 'https://end-dmpxo.art'];
 
       if (context) {
         contextText.hidden = false;
@@ -109,15 +137,114 @@
         }
       });
 
-      document.getElementById('startAdvisor').addEventListener('click', function () {
+      function setStatus(message, state) {
+        status.hidden = !message;
+        status.textContent = message || '';
+        status.dataset.state = state || '';
+      }
+
+      function addMessage(role, content) {
+        var message = document.createElement('p');
+        message.className = 'message ' + role;
+        message.textContent = content;
+        messages.appendChild(message);
+        messages.scrollTop = messages.scrollHeight;
+        return message;
+      }
+
+      function setSending(next) {
+        isSending = next;
+        startButton.disabled = next;
+        sendButton.disabled = next;
+        startButton.textContent = next ? '正在连接 AI 顾问…' : '开始 AI 选香';
+        sendButton.textContent = next ? '正在回复…' : '发送';
+      }
+
+      function buildFirstQuestion() {
         var note = document.getElementById('note').value.trim();
-        var request = [
+        return [
           context ? '我刚刚浏览了' + context : '',
           selectedIntent ? '这次更在意' + selectedIntent : '',
           note,
-          '请先问我 2 到 3 个简单问题，再从四大系列中帮我筛选。'
+          '请先用一个简短问题了解我，再帮我从四大系列中缩小范围。'
         ].filter(Boolean).join('。');
-        window.location.href = 'https://end-dmpxo.art/?q=' + encodeURIComponent(request);
+      }
+
+      async function requestReply(question) {
+        if (!endpoint) {
+          throw new Error('AI 服务尚未发布，请稍后再试。');
+        }
+        var response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: history.concat([{ role: 'user', content: question }]).slice(-6) })
+        });
+        if (!response.ok || !response.body) {
+          var errorBody = await response.json().catch(function () { return {}; });
+          throw new Error(errorBody.message || 'AI 服务暂时不可用，请稍后再试。');
+        }
+        var reader = response.body.getReader();
+        var decoder = new TextDecoder();
+        var buffer = '';
+        var answer = '';
+        var reply = addMessage('assistant', '');
+        while (true) {
+          var chunk = await reader.read();
+          if (chunk.done) break;
+          buffer += decoder.decode(chunk.value, { stream: true });
+          var lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line || line.indexOf('data:') !== 0) continue;
+            var data = line.slice(5).trim();
+            if (data === '[DONE]') continue;
+            try {
+              var payload = JSON.parse(data);
+              var delta = payload.choices && payload.choices[0] && payload.choices[0].delta && payload.choices[0].delta.content;
+              if (delta) {
+                answer += delta;
+                reply.textContent = answer;
+                messages.scrollTop = messages.scrollHeight;
+              }
+            } catch (error) {
+              throw new Error('AI 服务返回的数据格式无效。');
+            }
+          }
+        }
+        if (!answer) {
+          reply.remove();
+          throw new Error('AI 没有返回内容，请稍后再试。');
+        }
+        history.push({ role: 'user', content: question }, { role: 'assistant', content: answer });
+      }
+
+      async function send(question) {
+        if (isSending || !question) return;
+        setStatus('', '');
+        chat.hidden = false;
+        setup.hidden = true;
+        addMessage('user', question);
+        setSending(true);
+        try {
+          await requestReply(question);
+        } catch (error) {
+          addMessage('error', error.message);
+        } finally {
+          setSending(false);
+          input.focus();
+        }
+      }
+
+      startButton.addEventListener('click', function () {
+        send(buildFirstQuestion());
+      });
+      document.getElementById('chatForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var question = input.value.trim();
+        if (!question) return;
+        input.value = '';
+        send(question);
       });
     })();
   </script>
