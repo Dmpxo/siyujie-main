@@ -146,10 +146,14 @@
       function addMessage(role, content) {
         var message = document.createElement('p');
         message.className = 'message ' + role;
-        message.textContent = content;
+        message.textContent = cleanDisplayText(content);
         messages.appendChild(message);
         messages.scrollTop = messages.scrollHeight;
         return message;
+      }
+
+      function cleanDisplayText(content) {
+        return content.replace(/\*\*/g, '').replace(/^#{1,6}\s+/gm, '');
       }
 
       function setSending(next) {
@@ -209,7 +213,7 @@
               var delta = payload.choices && payload.choices[0] && payload.choices[0].delta && payload.choices[0].delta.content;
               if (delta) {
                 answer += delta;
-                reply.textContent = answer;
+                reply.textContent = cleanDisplayText(answer);
                 messages.scrollTop = messages.scrollHeight;
               }
             } catch (error) {
@@ -221,7 +225,7 @@
           reply.remove();
           throw new Error('AI 没有返回内容，请稍后再试。');
         }
-        history.push({ role: 'user', content: question }, { role: 'assistant', content: answer });
+        history.push({ role: 'user', content: question }, { role: 'assistant', content: cleanDisplayText(answer) });
       }
 
       async function send(question) {
