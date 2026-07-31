@@ -63,26 +63,26 @@
   <main class="shell">
     <section aria-labelledby="advisor-title">
       <p class="eyebrow">AI SCENT GUIDE</p>
-      <h1 id="advisor-title">先聊一聊，再选一串适合你的香。</h1>
-      <p class="intro">从十二花神、五行经典、四季果香与道系灵山中，AI 香道顾问会先了解你的当下，再给出有限、清晰的开始方向。</p>
+      <h1 id="advisor-title">先认识材料，再选一串真正适合你的合香。</h1>
+      <p class="intro">从花材、药材、香材到配伍与闻香层次，AI 顾问会用容易理解的话讲清商品，再根据你的需要给出具体选择。</p>
       <p class="context" id="contextText" hidden></p>
     </section>
     <section class="tool" aria-label="AI 选香咨询">
       <div class="setup" id="setup">
-        <h2>开始选香</h2>
-        <p>选一个场景，或直接写下此刻的想法。</p>
+        <h2>从你想了解的开始</h2>
+        <p>不需要懂香，选一个最接近的问题即可。</p>
         <div class="field">
-          <span class="field-label">这次更在意什么？</span>
+          <span class="field-label">你现在想先弄清什么？</span>
           <div class="choices" id="intentChoices">
-            <button class="choice" type="button" data-value="日常佩戴" aria-pressed="false">日常佩戴</button>
-            <button class="choice" type="button" data-value="送一份礼物" aria-pressed="false">送一份礼物</button>
-            <button class="choice" type="button" data-value="顺应季节" aria-pressed="false">顺应季节</button>
-            <button class="choice" type="button" data-value="想找一种香韵" aria-pressed="false">想找一种香韵</button>
+            <button class="choice" type="button" data-value="第一次认识合香" aria-pressed="false">第一次认识合香</button>
+            <button class="choice" type="button" data-value="了解材料与配伍" aria-pressed="false">了解材料与配伍</button>
+            <button class="choice" type="button" data-value="了解实际闻香" aria-pressed="false">它实际闻起来怎样</button>
+            <button class="choice" type="button" data-value="为自己或送礼选香" aria-pressed="false">为自己或送礼选香</button>
           </div>
         </div>
         <div class="field">
-          <label class="field-label" for="note">想补充的话</label>
-          <textarea id="note" maxlength="500" placeholder="例如：最近希望生活节奏慢一点，偏爱清润的花木气息。"></textarea>
+          <label class="field-label" for="note">商品名或你的需要</label>
+          <textarea id="note" maxlength="500" placeholder="例如：墨梅用了哪些材料？或者：送给第一次接触合香的朋友，希望清润、不甜腻。"></textarea>
         </div>
         <button class="start" id="startAdvisor" type="button">开始 AI 选香</button>
         <p class="note">AI 仅根据品牌资料提供选香参考，不替代医疗或专业建议。</p>
@@ -92,7 +92,7 @@
         <div class="messages" id="messages" aria-live="polite"></div>
         <form class="composer" id="chatForm">
           <label class="field-label" for="chatInput">继续补充</label>
-          <textarea id="chatInput" maxlength="500" placeholder="告诉我你的送礼对象、喜欢的气味或当下状态。"></textarea>
+          <textarea id="chatInput" maxlength="500" placeholder="可以继续问材料、配伍、闻香层次、价格或适合场景。"></textarea>
           <button class="send" id="sendButton" type="submit">发送</button>
         </form>
       </section>
@@ -162,11 +162,16 @@
 
       function buildFirstQuestion() {
         var note = document.getElementById('note').value.trim();
+        var prompts = {
+          '第一次认识合香': '我是第一次接触合香，请先用通俗的话解释花材、药材和香材在一串合香里分别做什么，再问我一个容易回答的问题。',
+          '了解材料与配伍': note ? '我想深入了解商品的材料与配伍。' : '我想了解材料与配伍，请用墨梅做一个具体示范，讲清花材、香材、香药与闻香层次。',
+          '了解实际闻香': note ? '我想知道商品实际闻起来是什么感觉。' : '我不熟悉香材，请用生活化的语言解释清润花气、草本香药、沉檀温润和果香清甜的差别，再问我更接近哪一种。',
+          '为自己或送礼选香': note ? '我想为自己或送礼选择合香。' : '我想为自己或送礼选香，请先问我一个容易回答的问题，并提供生活化的气味选项。'
+        };
         return [
           context ? '我刚刚浏览了' + context : '',
-          selectedIntent ? '这次更在意' + selectedIntent : '',
-          note,
-          '请先用一个简短问题了解我，再帮我从四大系列中缩小范围。'
+          prompts[selectedIntent] || (note ? '我对合香产品理解不深，请结合我的补充直接说明。' : '我是第一次接触合香，想从头了解。'),
+          note ? '我的补充：' + note : ''
         ].filter(Boolean).join('。');
       }
 
