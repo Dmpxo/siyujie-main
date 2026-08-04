@@ -4,43 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#22352a">
-  <meta name="description" content="思愈界 AI 香道顾问，从四大合香系列中帮你开始选香。">
+  <meta name="description" content="思愈界 AI 选香顾问，从真实材料和产品资料中帮你选一串合香。">
   <meta name="siyujie-ai-endpoint" content="https://ai.siyujie.fun">
-  <title>AI 香道顾问 | 思愈界</title>
+  <title>AI 选香顾问 | 思愈界</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --pine:#22352a; --paper:#f4f0e8; --ink:#1e281f; --vermilion:#8d3930; --line:rgba(30,40,31,.18); --mist:#e8e2d5; --warm:#f0dfbf; }
+    :root { --pine:#22352a; --paper:#f4f0e8; --ink:#1e281f; --vermilion:#8d3930; --line:rgba(30,40,31,.18); --mist:#e8e2d5; --warm:#f0dfbf; --muted:#536055; }
     * { box-sizing:border-box; }
     body { margin:0; background:var(--paper); color:var(--ink); font:400 16px/1.7 "Noto Sans SC",sans-serif; }
     a { color:inherit; text-decoration:none; }
     a:focus-visible, button:focus-visible, textarea:focus-visible { outline:3px solid #b18a58; outline-offset:3px; }
-    .shell { width:min(100% - 48px,1100px); margin:0 auto; }
+    .shell { width:min(100% - 48px,1160px); margin:0 auto; }
     .head { min-height:76px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
     .brand { font:600 19px/1.2 "Noto Serif SC",serif; }
     .brand span { color:var(--vermilion); }
-    .back { color:#536055; font-size:13px; }
-    main { display:grid; min-height:calc(100dvh - 76px); grid-template-columns:minmax(0,1fr) minmax(360px,.78fr); gap:72px; align-items:center; padding:72px 0; }
+    .back { color:var(--muted); font-size:13px; }
+    main { display:grid; min-height:calc(100dvh - 76px); grid-template-columns:minmax(0,1fr) minmax(390px,.92fr); gap:72px; align-items:center; padding:64px 0; }
     .eyebrow { margin:0 0 12px; color:var(--vermilion); font-size:12px; font-weight:600; }
-    h1 { max-width:620px; margin:0; font:600 clamp(38px,5vw,62px)/1.22 "Noto Serif SC",serif; }
-    .intro { max-width:570px; margin:20px 0 0; color:#536055; font-size:17px; }
+    h1 { max-width:630px; margin:0; font:600 clamp(38px,5vw,62px)/1.22 "Noto Serif SC",serif; }
+    .intro { max-width:570px; margin:20px 0 0; color:var(--muted); font-size:17px; }
     .context { margin:28px 0 0; border-left:2px solid var(--vermilion); padding:14px 16px; color:#49564a; font-size:14px; }
-    .tool { border:1px solid var(--line); background:rgba(255,255,255,.32); padding:28px; }
-    .tool h2 { margin:0; font:600 25px/1.35 "Noto Serif SC",serif; }
-    .tool p { margin:8px 0 0; color:#536055; font-size:14px; }
-    .field { margin-top:24px; }
-    .field-label { display:block; margin-bottom:9px; font-size:13px; font-weight:600; }
-    .choices { display:flex; flex-wrap:wrap; gap:8px; }
-    .choice { min-height:39px; border:1px solid var(--line); padding:7px 12px; background:transparent; color:#455348; cursor:pointer; font:500 13px/1.4 "Noto Sans SC",sans-serif; }
+    .proof { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:44px; border-top:1px solid var(--line); }
+    .proof div { padding:16px 12px 0 0; }
+    .proof div + div { border-left:1px solid var(--line); padding-left:14px; }
+    .proof strong { display:block; color:var(--pine); font:600 14px/1.5 "Noto Serif SC",serif; }
+    .proof span { display:block; margin-top:4px; color:var(--muted); font-size:12px; line-height:1.55; }
+    .tool { border:1px solid var(--line); background:rgba(255,255,255,.3); padding:30px; }
+    .tool h2 { margin:0; font:600 26px/1.35 "Noto Serif SC",serif; }
+    .tool p { margin:8px 0 0; color:var(--muted); font-size:14px; }
+    .progress { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:24px 0 0; }
+    .progress span { display:block; border-top:2px solid #cfc6b8; padding-top:7px; color:#7b857a; font-size:11px; }
+    .progress span[aria-current="step"] { border-color:var(--vermilion); color:var(--vermilion); font-weight:600; }
+    .guide-step { min-height:218px; padding:27px 0 4px; }
+    .guide-step[hidden], .results[hidden], .chat[hidden], .free-start[hidden], .service-status[hidden] { display:none; }
+    .step-label { display:block; margin-bottom:9px; font-size:13px; font-weight:600; }
+    .step-copy { min-height:46px; margin:0 0 18px; color:var(--muted); font-size:14px; }
+    .choices { display:grid; gap:8px; }
+    .choice { display:flex; min-height:56px; align-items:center; border:1px solid var(--line); padding:10px 13px; background:transparent; color:#3e4d40; cursor:pointer; font:500 14px/1.4 "Noto Sans SC",sans-serif; text-align:left; transition:background .18s,border-color .18s,color .18s; }
+    .choice::before { width:8px; height:8px; margin-right:11px; border:1px solid currentColor; border-radius:50%; content:""; flex:0 0 auto; }
+    .choice small { display:block; margin-top:3px; color:#6b766b; font-size:12px; font-weight:400; }
     .choice[aria-pressed="true"] { border-color:var(--pine); background:var(--pine); color:#fff9ee; }
-    textarea { width:100%; min-height:92px; resize:vertical; border:1px solid var(--line); background:#fffaf1; padding:11px 12px; color:var(--ink); font:400 14px/1.65 "Noto Sans SC",sans-serif; }
-    .start, .send { display:inline-flex; width:100%; min-height:52px; align-items:center; justify-content:center; margin-top:24px; border:0; background:var(--pine); color:#fff9ee; cursor:pointer; font:600 14px/1 "Noto Sans SC",sans-serif; letter-spacing:.08em; transition:background .2s,transform .2s; }
-    .start:hover, .send:hover { background:#344c3b; transform:translateY(-1px); }
-    .start:disabled, .send:disabled { cursor:not-allowed; opacity:.6; transform:none; }
-    .note, .service-status { margin:14px 0 0; color:#6a756b; font-size:12px; line-height:1.65; }
-    .service-status[hidden], .chat[hidden], .setup[hidden] { display:none; }
+    .choice[aria-pressed="true"] small { color:#dfe8da; }
+    .choice[aria-pressed="true"]::before { border-color:#f0dfbf; background:#f0dfbf; box-shadow:inset 0 0 0 2px var(--pine); }
+    .guide-actions { display:flex; gap:10px; margin-top:20px; }
+    button { font:inherit; }
+    .primary, .secondary, .text-button, .product-actions a { min-height:48px; display:inline-flex; align-items:center; justify-content:center; border:1px solid transparent; cursor:pointer; font-size:13px; font-weight:600; }
+    .primary { flex:1; background:var(--pine); color:#fff9ee; }
+    .primary:hover { background:#344c3b; }
+    .primary:disabled { cursor:not-allowed; opacity:.55; }
+    .secondary { min-width:82px; border-color:var(--line); background:transparent; color:var(--pine); }
+    .secondary:hover, .text-button:hover { border-color:var(--pine); }
+    .free-start { margin-top:22px; border-top:1px solid var(--line); padding-top:19px; }
+    .free-start label, .composer label { display:block; margin-bottom:8px; font-size:12px; font-weight:600; }
+    textarea { width:100%; min-height:76px; resize:vertical; border:1px solid var(--line); background:#fffaf1; padding:11px 12px; color:var(--ink); font:400 14px/1.65 "Noto Sans SC",sans-serif; }
+    .free-start-row { display:flex; gap:10px; margin-top:10px; }
+    .free-start-row .primary { flex:0 0 106px; }
+    .service-status { margin:16px 0 0; color:#6a756b; font-size:12px; line-height:1.65; }
     .service-status[data-state="error"] { color:var(--vermilion); }
+    .results { margin-top:28px; border-top:1px solid var(--line); padding-top:24px; }
+    .result-kicker { margin:0; color:var(--vermilion); font-size:11px; font-weight:600; letter-spacing:.08em; }
+    .results h3 { margin:5px 0 0; font:600 23px/1.35 "Noto Serif SC",serif; }
+    .result-summary { margin:10px 0 0; color:var(--muted); font-size:13px; }
+    .product-results { margin-top:18px; border-top:1px solid var(--line); }
+    .product-result { padding:18px 0; border-bottom:1px solid var(--line); }
+    .product-meta { display:flex; align-items:center; justify-content:space-between; gap:12px; color:var(--vermilion); font-size:12px; }
+    .product-result h4 { margin:6px 0 0; font:600 21px/1.3 "Noto Serif SC",serif; }
+    .product-price { color:#566255; font-size:12px; white-space:nowrap; }
+    .materials { display:-webkit-box; margin:8px 0 0; overflow:hidden; color:#526052; font-size:12px; line-height:1.7; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
+    .product-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:13px; }
+    .product-actions button, .product-actions a { min-height:36px; padding:7px 10px; }
+    .product-actions button { border:1px solid var(--pine); background:var(--pine); color:#fff9ee; }
+    .product-actions a { border-color:var(--line); color:var(--pine); }
+    .result-next { margin:16px 0 0; color:var(--muted); font-size:12px; }
+    .reset { margin-top:14px; border:0; border-bottom:1px solid currentColor; background:transparent; color:var(--pine); cursor:pointer; padding:0 0 2px; font-size:12px; }
     .chat { margin-top:24px; border-top:1px solid var(--line); padding-top:22px; }
     .messages { display:flex; max-height:330px; flex-direction:column; gap:12px; overflow-y:auto; padding-right:4px; }
     .message { max-width:92%; margin:0; padding:10px 12px; font-size:14px; line-height:1.7; white-space:pre-wrap; }
@@ -48,10 +86,9 @@
     .message.assistant { align-self:flex-start; background:#e9e0d0; color:#384438; }
     .message.error { align-self:flex-start; border-left:2px solid var(--vermilion); background:#f3e3dd; color:#722f28; }
     .composer { margin-top:16px; }
-    .composer textarea { min-height:76px; }
-    .send { margin-top:10px; }
-    @media (max-width:800px) { main { grid-template-columns:1fr; gap:38px; padding:54px 0 66px; } }
-    @media (max-width:560px) { .shell { width:min(100% - 36px,1100px); } .head { min-height:68px; } h1 { font-size:39px; } .intro { font-size:16px; } .tool { padding:23px 18px; } .messages { max-height:300px; } }
+    .send { width:100%; margin-top:10px; }
+    @media (max-width:850px) { main { grid-template-columns:1fr; gap:38px; padding:52px 0 64px; } .proof { max-width:620px; } }
+    @media (max-width:560px) { .shell { width:min(100% - 36px,1160px); } .head { min-height:68px; } h1 { font-size:39px; } .intro { font-size:16px; } .proof { margin-top:32px; } .proof strong { font-size:13px; } .proof span { font-size:11px; } .tool { padding:23px 18px; } .guide-step { min-height:236px; } .free-start-row { flex-direction:column; } .free-start-row .primary { flex:auto; } .guide-actions .secondary { min-width:76px; } .messages { max-height:300px; } }
     @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
   </style>
 </head>
@@ -63,37 +100,76 @@
   <main class="shell">
     <section aria-labelledby="advisor-title">
       <p class="eyebrow">AI SCENT GUIDE</p>
-      <h1 id="advisor-title">先认识材料，再选一串真正适合你的合香。</h1>
-      <p class="intro">从花材、药材、香材到配伍与闻香层次，AI 顾问会用容易理解的话讲清商品，再根据你的需要给出具体选择。</p>
+      <h1 id="advisor-title">先看懂材料，再找到真正适合你的合香。</h1>
+      <p class="intro">从花材、药材、香材到配伍和闻香层次，选香顾问先根据真实产品资料为你缩小范围，再把每一串讲清楚。</p>
       <p class="context" id="contextText" hidden></p>
+      <div class="proof" aria-label="选香原则">
+        <div><strong>真实材料</strong><span>只用产品资料中确认的信息</span></div>
+        <div><strong>先给候选</strong><span>不必先懂香材术语</span></div>
+        <div><strong>再去试闻</strong><span>甜度和贴肤感以试闻为准</span></div>
+      </div>
     </section>
     <section class="tool" aria-label="AI 选香咨询">
       <div class="setup" id="setup">
-        <h2>从你想了解的开始</h2>
-        <p>不需要懂香，选一个最接近的问题即可。</p>
-        <div class="field">
-          <span class="field-label">你现在想先弄清什么？</span>
-          <div class="choices" id="intentChoices">
-            <button class="choice" type="button" data-value="第一次认识合香" aria-pressed="false">第一次认识合香</button>
-            <button class="choice" type="button" data-value="了解材料与配伍" aria-pressed="false">了解材料与配伍</button>
-            <button class="choice" type="button" data-value="了解实际闻香" aria-pressed="false">它实际闻起来怎样</button>
-            <button class="choice" type="button" data-value="为自己或送礼选香" aria-pressed="false">为自己或送礼选香</button>
+        <h2>30 秒找到第一串</h2>
+        <p>每一步都只选一个最接近的答案，不确定也没关系。</p>
+        <div class="progress" aria-label="选香进度">
+          <span aria-current="step" data-progress="0">01 为谁而选</span>
+          <span data-progress="1">02 材料线索</span>
+          <span data-progress="2">03 预算范围</span>
+        </div>
+        <section class="guide-step" data-step="0" aria-labelledby="purpose-label">
+          <span class="step-label" id="purpose-label">这串香主要是为谁而选？</span>
+          <p class="step-copy">这会决定后续解释更侧重你自己，还是帮助你判断送礼是否合适。</p>
+          <div class="choices">
+            <button class="choice" type="button" data-field="purpose" data-value="self" aria-pressed="false">为自己佩戴<small>从你想靠近的材料和气味线索开始</small></button>
+            <button class="choice" type="button" data-field="purpose" data-value="gift" aria-pressed="false">为朋友或家人送礼<small>后续可继续按对方日常偏好比较</small></button>
           </div>
+        </section>
+        <section class="guide-step" data-step="1" aria-labelledby="direction-label" hidden>
+          <span class="step-label" id="direction-label">你想先从哪种材料线索靠近？</span>
+          <p class="step-copy">这是筛选入口，不是在给香气下结论。</p>
+          <div class="choices">
+            <button class="choice" type="button" data-field="direction" data-value="flower" aria-pressed="false">清雅花材<small>从花材主题和花木配伍开始看</small></button>
+            <button class="choice" type="button" data-field="direction" data-value="wood" aria-pressed="false">沉檀等香材<small>想先认识沉香、檀香、树脂的底韵</small></button>
+            <button class="choice" type="button" data-field="direction" data-value="herb" aria-pressed="false">草本与香药<small>想看草本、香药怎样连接层次</small></button>
+            <button class="choice" type="button" data-field="direction" data-value="fruit" aria-pressed="false">四季果香<small>先从果香系列的明亮线索开始</small></button>
+          </div>
+        </section>
+        <section class="guide-step" data-step="2" aria-labelledby="budget-label" hidden>
+          <span class="step-label" id="budget-label">预算先按哪个范围看？</span>
+          <p class="step-copy">我们只把价格资料作为筛选条件，实际规格和售价请以现场为准。</p>
+          <div class="choices">
+            <button class="choice" type="button" data-field="budget" data-value="under150" aria-pressed="false">150 元以内<small>优先展示有该价格起点的候选</small></button>
+            <button class="choice" type="button" data-field="budget" data-value="upTo300" aria-pressed="false">150 - 300 元<small>先看这个常见范围内的选择</small></button>
+            <button class="choice" type="button" data-field="budget" data-value="open" aria-pressed="false">先不设预算<small>先判断材料和方向，再决定规格</small></button>
+          </div>
+        </section>
+        <div class="guide-actions">
+          <button class="secondary" id="guideBack" type="button" hidden>上一步</button>
+          <button class="primary" id="guideNext" type="button" disabled>继续</button>
         </div>
-        <div class="field">
-          <label class="field-label" for="note">商品名或你的需要</label>
-          <textarea id="note" maxlength="500" placeholder="例如：墨梅用了哪些材料？或者：送给第一次接触合香的朋友，希望清润、不甜腻。"></textarea>
+        <div class="free-start" id="freeStart">
+          <label for="freeQuestion">已经有具体问题？</label>
+          <textarea id="freeQuestion" maxlength="500" placeholder="例如：墨梅用了哪些材料？或者：送给第一次接触合香的朋友，想先了解实际闻香。"></textarea>
+          <div class="free-start-row"><button class="primary" id="freeStartButton" type="button">直接咨询</button></div>
         </div>
-        <button class="start" id="startAdvisor" type="button">开始 AI 选香</button>
-        <p class="note">AI 仅根据品牌资料提供选香参考，不替代医疗或专业建议。</p>
       </div>
+      <section class="results" id="results" aria-live="polite" hidden>
+        <p class="result-kicker">FIRST SHORTLIST</p>
+        <h3>先从这几串开始认识</h3>
+        <p class="result-summary" id="resultSummary"></p>
+        <div class="product-results" id="productResults"></div>
+        <p class="result-next" id="resultNext"></p>
+        <button class="reset" id="resetGuide" type="button">重新选择</button>
+      </section>
       <p class="service-status" id="serviceStatus" role="status" hidden></p>
       <section class="chat" id="chat" aria-label="AI 香道顾问对话" hidden>
         <div class="messages" id="messages" aria-live="polite"></div>
         <form class="composer" id="chatForm">
-          <label class="field-label" for="chatInput">继续补充</label>
+          <label for="chatInput">继续补充</label>
           <textarea id="chatInput" maxlength="500" placeholder="可以继续问材料、配伍、闻香层次、价格或适合场景。"></textarea>
-          <button class="send" id="sendButton" type="submit">发送</button>
+          <button class="primary send" id="sendButton" type="submit">发送</button>
         </form>
       </section>
     </section>
@@ -105,42 +181,48 @@
       var focus = params.get('focus') || '';
       var context = [from, focus].filter(Boolean).join(' · ');
       var endpoint = document.querySelector('meta[name="siyujie-ai-endpoint"]').content.trim();
-      var selectedIntent = '';
+      var allowedReturns = ['https://siyujie.fun', 'https://siyujie.online', 'https://siyujie.xyz', 'https://siyujie.shop', 'https://end-dmpxo.art'];
+      var guideFields = ['purpose', 'direction', 'budget'];
+      var profile = { purpose: '', direction: '', budget: '' };
+      var currentStep = 0;
       var history = [];
       var isSending = false;
       var contextText = document.getElementById('contextText');
       var returnLink = document.getElementById('returnLink');
       var status = document.getElementById('serviceStatus');
       var setup = document.getElementById('setup');
+      var results = document.getElementById('results');
+      var productResults = document.getElementById('productResults');
+      var resultSummary = document.getElementById('resultSummary');
+      var resultNext = document.getElementById('resultNext');
       var chat = document.getElementById('chat');
       var messages = document.getElementById('messages');
       var input = document.getElementById('chatInput');
-      var startButton = document.getElementById('startAdvisor');
+      var freeQuestion = document.getElementById('freeQuestion');
+      var guideNext = document.getElementById('guideNext');
+      var guideBack = document.getElementById('guideBack');
       var sendButton = document.getElementById('sendButton');
-      var allowedReturns = ['https://siyujie.fun', 'https://siyujie.online', 'https://siyujie.xyz', 'https://siyujie.shop', 'https://end-dmpxo.art'];
 
       if (context) {
         contextText.hidden = false;
         contextText.textContent = '你刚刚浏览：' + context;
       }
-      if (allowedReturns.indexOf(params.get('return')) !== -1) {
-        returnLink.href = params.get('return');
-      }
-
-      document.getElementById('intentChoices').addEventListener('click', function (event) {
-        var button = event.target.closest('button[data-value]');
-        if (!button) return;
-        selectedIntent = button.dataset.value;
-        var choices = this.querySelectorAll('button[data-value]');
-        for (var i = 0; i < choices.length; i++) {
-          choices[i].setAttribute('aria-pressed', choices[i] === button ? 'true' : 'false');
-        }
-      });
+      if (allowedReturns.indexOf(params.get('return')) !== -1) returnLink.href = params.get('return');
 
       function setStatus(message, state) {
         status.hidden = !message;
         status.textContent = message || '';
         status.dataset.state = state || '';
+      }
+
+      function setSending(next) {
+        isSending = next;
+        sendButton.disabled = next;
+        sendButton.textContent = next ? '正在回复…' : '发送';
+      }
+
+      function cleanDisplayText(content) {
+        return content.replace(/\*\*/g, '').replace(/^#{1,6}\s+/gm, '');
       }
 
       function addMessage(role, content) {
@@ -152,37 +234,103 @@
         return message;
       }
 
-      function cleanDisplayText(content) {
-        return content.replace(/\*\*/g, '').replace(/^#{1,6}\s+/gm, '');
+      function updateGuide() {
+        var steps = setup.querySelectorAll('[data-step]');
+        var progress = setup.querySelectorAll('[data-progress]');
+        for (var i = 0; i < steps.length; i++) steps[i].hidden = i !== currentStep;
+        for (var j = 0; j < progress.length; j++) {
+          if (j === currentStep) progress[j].setAttribute('aria-current', 'step');
+          else progress[j].removeAttribute('aria-current');
+        }
+        guideBack.hidden = currentStep === 0;
+        guideNext.disabled = !profile[guideFields[currentStep]] || isSending;
+        guideNext.textContent = currentStep === guideFields.length - 1 ? '查看我的候选' : '继续';
       }
 
-      function setSending(next) {
-        isSending = next;
-        startButton.disabled = next;
-        sendButton.disabled = next;
-        startButton.textContent = next ? '正在连接 AI 顾问…' : '开始 AI 选香';
-        sendButton.textContent = next ? '正在回复…' : '发送';
+      function resetGuide() {
+        profile = { purpose: '', direction: '', budget: '' };
+        currentStep = 0;
+        results.hidden = true;
+        setup.hidden = false;
+        productResults.textContent = '';
+        var choices = setup.querySelectorAll('.choice');
+        for (var i = 0; i < choices.length; i++) choices[i].setAttribute('aria-pressed', 'false');
+        updateGuide();
       }
 
-      function buildFirstQuestion() {
-        var note = document.getElementById('note').value.trim();
-        var prompts = {
-          '第一次认识合香': '我是第一次接触合香，请先用通俗的话解释花材、药材和香材在一串合香里分别做什么，再问我一个容易回答的问题。',
-          '了解材料与配伍': note ? '我想深入了解商品的材料与配伍。' : '我想了解材料与配伍，请用墨梅做一个具体示范，讲清花材、香材、香药与闻香层次。',
-          '了解实际闻香': note ? '我想知道商品实际闻起来是什么感觉。' : '我不熟悉香材，请用生活化的语言解释清润花气、草本香药、沉檀温润和果香清甜的差别，再问我更接近哪一种。',
-          '为自己或送礼选香': note ? '我想为自己或送礼选择合香。' : '我想为自己或送礼选香，请先问我一个容易回答的问题，并提供生活化的气味选项。'
-        };
-        return [
-          context ? '我刚刚浏览了' + context : '',
-          prompts[selectedIntent] || (note ? '我对合香产品理解不深，请结合我的补充直接说明。' : '我是第一次接触合香，想从头了解。'),
-          note ? '我的补充：' + note : ''
-        ].filter(Boolean).join('。');
+      function addProductResult(product) {
+        var article = document.createElement('article');
+        article.className = 'product-result';
+        var meta = document.createElement('div');
+        meta.className = 'product-meta';
+        var collection = document.createElement('span');
+        collection.textContent = product.collection + (product.series ? ' · ' + product.series : '');
+        var price = document.createElement('span');
+        price.className = 'product-price';
+        price.textContent = product.price;
+        meta.appendChild(collection);
+        meta.appendChild(price);
+        var title = document.createElement('h4');
+        title.textContent = product.name;
+        var materials = document.createElement('p');
+        materials.className = 'materials';
+        materials.textContent = '已确认材料：' + product.formula;
+        var actions = document.createElement('div');
+        actions.className = 'product-actions';
+        var explain = document.createElement('button');
+        explain.type = 'button';
+        explain.dataset.productName = product.name;
+        explain.textContent = '问 AI 为什么适合我';
+        var series = document.createElement('a');
+        series.href = product.seriesUrl;
+        series.textContent = '浏览系列';
+        article.appendChild(meta);
+        article.appendChild(title);
+        article.appendChild(materials);
+        actions.appendChild(explain);
+        actions.appendChild(series);
+        article.appendChild(actions);
+        productResults.appendChild(article);
+      }
+
+      async function requestStarter() {
+        if (!endpoint) throw new Error('AI 服务尚未发布，请稍后再试。');
+        var response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ starterProfile: profile })
+        });
+        var payload = await response.json().catch(function () { return {}; });
+        if (!response.ok || !Array.isArray(payload.products) || !payload.products.length) {
+          throw new Error(payload.message || '暂时无法生成选香候选，请直接描述你的需要。');
+        }
+        return payload;
+      }
+
+      async function showStarterResults() {
+        if (isSending) return;
+        setStatus('', '');
+        isSending = true;
+        guideNext.disabled = true;
+        guideNext.textContent = '正在筛选…';
+        try {
+          var payload = await requestStarter();
+          resultSummary.textContent = payload.summary;
+          resultNext.textContent = payload.nextQuestion || '';
+          productResults.textContent = '';
+          for (var i = 0; i < payload.products.length; i++) addProductResult(payload.products[i]);
+          setup.hidden = true;
+          results.hidden = false;
+        } catch (error) {
+          setStatus(error.message, 'error');
+        } finally {
+          isSending = false;
+          updateGuide();
+        }
       }
 
       async function requestReply(question) {
-        if (!endpoint) {
-          throw new Error('AI 服务尚未发布，请稍后再试。');
-        }
+        if (!endpoint) throw new Error('AI 服务尚未发布，请稍后再试。');
         var response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -232,7 +380,6 @@
         if (isSending || !question) return;
         setStatus('', '');
         chat.hidden = false;
-        setup.hidden = true;
         addMessage('user', question);
         setSending(true);
         try {
@@ -245,8 +392,34 @@
         }
       }
 
-      startButton.addEventListener('click', function () {
-        send(buildFirstQuestion());
+      setup.addEventListener('click', function (event) {
+        var choice = event.target.closest('button[data-field]');
+        if (!choice) return;
+        var field = choice.dataset.field;
+        profile[field] = choice.dataset.value;
+        var fieldChoices = setup.querySelectorAll('button[data-field="' + field + '"]');
+        for (var i = 0; i < fieldChoices.length; i++) fieldChoices[i].setAttribute('aria-pressed', fieldChoices[i] === choice ? 'true' : 'false');
+        updateGuide();
+      });
+
+      guideNext.addEventListener('click', function () {
+        if (!profile[guideFields[currentStep]]) return;
+        if (currentStep === guideFields.length - 1) showStarterResults();
+        else { currentStep += 1; updateGuide(); }
+      });
+      guideBack.addEventListener('click', function () { if (currentStep > 0) { currentStep -= 1; updateGuide(); } });
+      document.getElementById('resetGuide').addEventListener('click', resetGuide);
+      document.getElementById('freeStartButton').addEventListener('click', function () {
+        var question = freeQuestion.value.trim();
+        if (!question) { freeQuestion.focus(); return; }
+        setup.hidden = true;
+        send((context ? '我刚刚浏览了' + context + '。' : '') + question);
+      });
+      productResults.addEventListener('click', function (event) {
+        var button = event.target.closest('button[data-product-name]');
+        if (!button) return;
+        var question = '我完成了第一轮选香，想重点了解“' + button.dataset.productName + '”。请按结论、材料结构、闻香层次、适合场景和注意，说明它为什么可能适合我；没有确认的甜度和浓淡请明确提示需要试闻。';
+        send(question);
       });
       document.getElementById('chatForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -255,6 +428,7 @@
         input.value = '';
         send(question);
       });
+      updateGuide();
     })();
   </script>
 </body>
